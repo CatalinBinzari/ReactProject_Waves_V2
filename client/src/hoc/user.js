@@ -17,9 +17,8 @@ const links = [
 ]
 
 const UserLayout = (props) => {
-
     const generateLinks = (links) => (
-        links.map((item,i)=>(
+        links.map((item, i) => (
             <Link to={item.linkTo} key={i}>
                 {item.name}
             </Link>
@@ -33,7 +32,7 @@ const UserLayout = (props) => {
                 <div className="user_left_nav">
                     <h2>My account</h2>
                     <div className="links">
-                        { generateLinks(links)}
+                        {generateLinks(links)}
                     </div>
                 </div>
                 <div className="user_right">
