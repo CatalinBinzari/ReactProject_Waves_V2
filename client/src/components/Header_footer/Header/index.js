@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
+import { logoutUser } from '../../../actions/user_actions'
 class Header extends Component {
 
     state = {
@@ -39,10 +40,38 @@ class Header extends Component {
             }
         ]
     }
+    logoutHandler = () => {
+        console.log(this.props.user.userData)
+        this.props.dispatch(logoutUser()).then(response => {
+            //catch response.payload.success from server.js instead of props
+            if (response.payload.success) {
+                this.props.history.push('/')//we need to inject router for this
+            }
+        })
+    }
+    cartLink = (item, i) => {
+        const user = this.props.user.userData
+        return ( //if we have smth in user card, we return how many items we have in that list, if not, zero
+            <div className="cart_link" key={i}>
+                <span>{user.cart ? user.cart.length : 0}</span>
+                <Link to={item.linkTo}>
+                    {item.name}
+                </Link>
+            </div>
+        )
+    }
+
     defaultLink = (item, i) => (
-        <Link to={item.linkTo} key={i}>
-            {item.name}
-        </Link>
+        item.name === 'Log out' ?
+            <div className="log_out_link"
+                key={i}
+                onClick={() => this.logoutHandler()}>
+                {item.name}
+            </div>
+            :
+            < Link to={item.linkTo} key={i} >
+                {item.name}
+            </Link>
     )
     showLinks = (type) => {
         let list = [];
@@ -60,7 +89,12 @@ class Header extends Component {
             });
         }
         return list.map((item, i) => {
-            return this.defaultLink(item, i)
+            if (item.name !== 'My Cart') {
+                return this.defaultLink(item, i)
+            } else {
+                return this.cartLink(item, i)
+            }
+
         })
     }
     render() {
@@ -92,4 +126,4 @@ function mapStateToProps(state) { //to inject the props we get from redux to con
         user: state.user
     }
 }
-export default connect(mapStateToProps)(Header); 
+export default connect(mapStateToProps)(withRouter(Header)); 
