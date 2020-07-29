@@ -12,7 +12,9 @@ const Routes = () => {
       <Switch>
         <Route path="/user/dashboard" exact component={Auth(UserDashboard, true)} />
         {/* wee will render auth instead of UserDashboard component 
-          complete public routes will be true, not public completly will be false, and completly public will be null
+              -complete public routes will be true,
+              -not public completly will be false,
+              -and completly public will be null
         */}
         <Route path="/register" exact component={Auth(Register, false)} />
         <Route path="/register_login" exact component={Auth(RegisterLogin, false)} />

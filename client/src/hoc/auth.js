@@ -13,7 +13,7 @@ export default function (ComposedClass, reload, adminRoute = null) {  //function
         componentDidMount() {
             this.props.dispatch(auth()).then(response => {
                 let user = this.props.user.userData;
-                console.log(user);
+                //console.log(user);
 
                 if (!user.isAuth) {
                     if (reload) {
@@ -48,13 +48,16 @@ export default function (ComposedClass, reload, adminRoute = null) {  //function
     }
 
     function mapStateToProps(state) { //for redux
+        //console.log("deb1")
+        //console.log(this.props)
         return {
-            user: state.user
+            user: state.user,
+            // test: "test"
         }
     }
 
     return connect(mapStateToProps)(AuthenticationCheck)
-    //if we are using connect and are using mapStateToProps, we can 
+
 }
 
 

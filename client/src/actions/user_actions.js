@@ -39,7 +39,6 @@ export function auth() {
         type: AUTH_USER,
         payload: request
     }
-
 }
 
 export function logoutUser() {
