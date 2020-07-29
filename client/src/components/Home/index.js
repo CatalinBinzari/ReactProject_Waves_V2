@@ -7,7 +7,7 @@ import { getProductsBySell, getProductsByArrival } from '../../actions/products_
 class Home extends Component {
 
     componentDidMount() {
-        this.props.dispatch(getProductsBySell());
+        this.props.dispatch(getProductsBySell());//lanseaza actiuni
         this.props.dispatch(getProductsByArrival());
     }
     render() {
@@ -15,7 +15,7 @@ class Home extends Component {
             <div>
                 <HomeSlider />
                 <CardBlock
-                    list={this.props.products.bySell}
+                    list={this.props.products.bySell}// 
                     title="Best Selling guitars"
                 />
                 <HomePromotion />
@@ -27,10 +27,10 @@ class Home extends Component {
         );
     }
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {// ia starea din reduceri
     return {
         products: state.products
     }
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Home);//
