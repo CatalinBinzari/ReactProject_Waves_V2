@@ -28,6 +28,47 @@ const { admin } = require('./middleware/admin');
 //             PRODUCTS
 //=================================
 
+app.post('/api/product/shop', (req, res) => {
+    //first we need the data with{limit,skip,filters} from req
+    let order = req.body.order ? req.body.order : 'desc';
+    let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
+    let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+    let skip = parseInt(req.body.skip)
+    let findArgs = {};
+
+    for (let key in req.body.filters) {
+        //looping all the filters we get
+        if (req.body.filters[key].length > 0) {//check if its empty or not
+            if (key === 'price') {//pass an object to array
+                findArgs[key] = {
+                    $gte: req.body.filters[key][0],
+                    $lte: req.body.filters[key][1]
+                }
+            } else {
+                findArgs[key] = req.body.filters[key]
+            }
+        }
+    }
+    //console.log(findArgs) response in server terminal
+
+    Product.
+        find(findArgs).
+        populate('brand').
+        populate('wood').
+        sort([[sortBy, order]]).
+        skip(skip).
+        limit(limit).
+        exec((err, articles) => {
+            if (err) return res.status(400).send(err);
+            res.status(200).json({ //reducer expects article && size
+                size: articles.length,
+                articles
+            })
+        })
+
+})
+
+
 // BY ARRIVAL
 // /articles?sortBy=createdAt&order=desc&limit=4
 
