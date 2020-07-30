@@ -43,12 +43,38 @@ class CollapseCheckbox extends Component {
     renderList = () => (
         this.props.list ?
             this.props.list.map((value) => (
-                <ListItem>
-
+                <ListItem key={value._id} style={{ padding: '10px 0' }}>
+                    <ListItemText primary={value.name} />
+                    <ListItemSecondaryAction>
+                        <Checkbox
+                            color="primary"
+                            onChange={this.handleToggle(value._id)}
+                            checked={this.state.checked.indexOf(value._id) !== -1} // if true, then default every checkbox renders as true
+                        />
+                    </ListItemSecondaryAction>
                 </ListItem>
             ))
             : null
     )
+    handleToggle = value => () => { //takes whatever from value and run a function
+        const { checked } = this.state; // short version of: const checked = this.state.checked
+        const currentIndex = checked.indexOf(value) //indexOf search into the array the value
+        const newChecked = [...checked]
+
+        if (currentIndex === -1) { //not in the list
+            newChecked.push(value)
+        } else {
+            newChecked.splice(currentIndex, 1) //position of the value we want to delete, 1 meands one entry to delete
+        }
+
+
+
+        this.setState({
+            checked: newChecked
+        }, () => {
+            this.props.handleFilters(newChecked) //callback function that pass the array with checked values to parrent
+        })
+    }
     render() {
         return (
             <div className="collapse_items_wrapper">
