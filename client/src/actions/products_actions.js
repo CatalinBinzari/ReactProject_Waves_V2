@@ -39,9 +39,14 @@ export function getProductsToShop(skip, limit, filters = [], previousState = [])
     }
     const request = axios.post(`${PRODUCT_SERVER}/shop`, data)
         .then(response => {//from server we get an object with 2 things inside, size && articles
+            let newState = [ //merge what we had with what we want to have from the server, may be empty array
+                ...previousState, //empty array or previous 6,12,18...
+                ...response.data.articles
+            ]
+
             return {
                 size: response.data.size,
-                articles: response.data.articles
+                articles: newState
             }
         });
     return { //with redux we have to return smth
@@ -61,7 +66,6 @@ export function getBrands() {
         type: GET_BRANDS,
         payload: request
     }
-
 }
 
 export function getWoods() {
@@ -71,5 +75,4 @@ export function getWoods() {
         type: GET_WOODS,
         payload: request
     }
-
 }

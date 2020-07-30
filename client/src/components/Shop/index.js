@@ -66,6 +66,21 @@ class Shop extends Component {
         }
         return array
     }
+    loadMoreCards = () => {
+        //when we load more,  we dont want to replace that six with another six, we want to bring six more
+        // we have to change the skip to 6
+        let skip = this.state.skip + this.state.limit// 0 + 6 and if click again, will be 6 + 6
+        this.props.dispatch(getProductsToShop(
+            skip,
+            this.state.limit,
+            this.state.filters,
+            this.props.products.toShop //to keep current state of 6 and if we want 6 more, we merge old six with new six
+        )).then(() => {
+            this.setState({
+                skip
+            })
+        })
+    }
     render() {
 
         const products = this.props.products
@@ -113,7 +128,7 @@ class Shop extends Component {
                                         limit={this.state.limit}
                                         size={products.toShopSize}
                                         products={products.toShop}
-                                        loadMore={() => console.log('load more')}
+                                        loadMore={() => this.loadMoreCards()}
                                     />
                                 </div>
                             </div>
