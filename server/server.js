@@ -50,7 +50,7 @@ app.post('/api/product/shop', (req, res) => {
         }
     }
     //console.log(findArgs) response in server terminal
-
+    findArgs['publish'] = true;
     Product.
         find(findArgs).
         populate('brand').
