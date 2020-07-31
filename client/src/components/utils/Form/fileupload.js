@@ -35,8 +35,18 @@ class Fileupload extends Component {
                 })
             })
     }
-    onRemove = () => {//will go to cloudinary and remove the image
+    onRemove = (id) => {//will go to cloudinary and remove the image
+        axios.get(`/api/users/removeimage?public_id=${id}`).then(response => {
+            let images = this.state.uploadedFiles.filter(item => { //remove image from the state
+                return item.public_id !== id;// generate new array without that particular id
+            })
 
+            this.setState({
+                uploadedFiles: images
+            }, () => {
+                this.props.imagesHandler(images)
+            })
+        })
     }
     showUploadedImages = () => (
         this.state.uploadedFiles.map(item => (
@@ -52,6 +62,15 @@ class Fileupload extends Component {
             </div>
         ))
     )
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.reset) { //means if form succes == true
+            return state = {
+                uploadedFiles: []
+            }
+        }
+        return null;
+    }
 
     render() {
         return (
