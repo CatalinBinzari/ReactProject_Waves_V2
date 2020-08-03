@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import MyButton from './button';
 
+import { connect } from 'react-redux';
+import { addToCart } from '../../actions/user_actions' //related to product but we are adding this to user db
+
 class Card extends Component {
     renderCardImage(images) {
         if (images.length > 0) {
@@ -58,7 +61,10 @@ class Card extends Component {
                                 <MyButton
                                     type="bag_link"
                                     runAction={() => {
-                                        console.log('add to card')
+                                        props.user.userData.isAuth ?
+                                            this.props.dispatch(addToCart(props._id))
+                                            :
+                                            console.log("you need to log in")
                                     }}
                                 />
                             </div>
@@ -70,5 +76,9 @@ class Card extends Component {
         );
     }
 }
-
-export default Card;
+const mapStateToProps = (state) => {//when this component loads we have the user inside the state.user.userdata
+    return {
+        user: state.user //check inside props if user is auth
+    }
+}
+export default connect(mapStateToProps)(Card);

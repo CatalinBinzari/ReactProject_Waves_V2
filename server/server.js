@@ -264,6 +264,43 @@ app.get('/api/users/removeimage', auth, admin, (req, res) => {
         res.status(200).send('ok');//means it was already removes
     })
 })
+
+
+app.post('/api/users/addToCart', auth, (req, res) => { //auth return the req.user and req.token
+    User.findOne({ _id: req.user._id }, (err, doc) => {
+        let duplicate = false //by default we dont have duplicate entry
+        doc.cart.forEach( //loop all the info the user have inside the card(user.js/cart) and if it's repeated, change duplicate to true
+            (item) => {
+                if (item.id == req.query.productId) { //req.query.productId come from the client right now
+                    duplicate = true;
+                }
+            })
+        if (duplicate) { //modify the quantity
+            ///
+        } else {
+            User.findOneAndUpdate( //update whatever is inside the user
+                { _id: req.user._id },
+                {
+                    $push: {
+                        cart: {
+                            id: mongoose.Types.ObjectId(req.query.productId), //we will search by id later
+                            quantity: 1, //it's unique, if dublicated we do it upper
+                            date: Date.now()
+                        }
+                    }
+                },
+                { new: true },// to get document back
+                (err, doc) => { //callback funct
+                    if (err) return res.json({ success: false, err });
+                    res.status(200).json(doc.cart)
+                }
+
+            )
+        }
+    })
+})
+
+
 const port = process.env.PORT || 3002;
 app.listen(port, () => {
     console.log(`Server Running at ${port}`)
