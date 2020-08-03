@@ -18,7 +18,12 @@ export default function (state = {}, action) {
         case LOGOUT_USER:
             return { ...state }
         case ADD_TO_CART_USER: // go to the userdata from redux and  modify
-            return { ...state, userData: { ...state.userData } }
+            return {
+                ...state, userData: {
+                    ...state.userData,
+                    cart: action.payload
+                }
+            }
         default:
             return state;
     }

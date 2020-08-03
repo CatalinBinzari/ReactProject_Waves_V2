@@ -56,7 +56,7 @@ const ProdNfo = (props) => {
                     type="add_to_card_link" //a button with this type
                     runAction={() => {
                         ////
-                        console.log('add to cart')
+                        props.addToCart(detail._id) //id of the element
                     }}
                 />
             </div>

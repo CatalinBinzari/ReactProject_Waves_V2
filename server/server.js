@@ -276,7 +276,12 @@ app.post('/api/users/addToCart', auth, (req, res) => { //auth return the req.use
                 }
             })
         if (duplicate) { //modify the quantity
-            ///
+            User.findOneAndUpdate(
+                { _id: req.user._id, "cart.id": mongoose.Types.ObjectId(req.query.productId) }, //find the user and the cart.id
+                { $inc: { "cart.$.quantity": 1 } }, //goto the record and increment the value
+                { new: true }, //sending everything inside the cart to the user
+                () => { }
+            )
         } else {
             User.findOneAndUpdate( //update whatever is inside the user
                 { _id: req.user._id },
