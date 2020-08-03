@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import Dropzone from "react-dropzone";
+import Dropzone from 'react-dropzone';
 import axios from 'axios';
+
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle'
-import CircularProgress from '@material-ui/core/CircularProgress'
-//import { response } from 'express';
+import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 class Fileupload extends Component {
-    constructor() { //for dropzone
+    constructor() {
         super();
         this.state = {
             uploadedFiles: [],
-            uploading: false //when done, became true
+            uploading: false
         }
     }
-    onDrop = (files) => { //event is actually the files
+
+    onDrop = (files) => {
         this.setState({ uploading: true });
         let formData = new FormData();
         const config = {
@@ -23,7 +25,9 @@ class Fileupload extends Component {
 
         axios.post('/api/users/uploadimage', formData, config)
             .then(response => {
-                console.log(response.data)
+
+                //console.log(response.data)
+
                 this.setState({
                     uploading: false,
                     uploadedFiles: [
@@ -31,15 +35,16 @@ class Fileupload extends Component {
                         response.data
                     ]
                 }, () => {
-                    this.props.imagesHandler(this.state.uploadedFiles) //back to the parent
+                    this.props.imagesHandler(this.state.uploadedFiles)
                 })
-            })
+            });
     }
-    onRemove = (id) => {//will go to cloudinary and remove the image
+
+    onRemove = (id) => {
         axios.get(`/api/users/removeimage?public_id=${id}`).then(response => {
-            let images = this.state.uploadedFiles.filter(item => { //remove image from the state
-                return item.public_id !== id;// generate new array without that particular id
-            })
+            let images = this.state.uploadedFiles.filter(item => {
+                return item.public_id !== id;
+            });
 
             this.setState({
                 uploadedFiles: images
@@ -48,6 +53,7 @@ class Fileupload extends Component {
             })
         })
     }
+
     showUploadedImages = () => (
         this.state.uploadedFiles.map(item => (
             <div className="dropzone_box"
@@ -64,13 +70,14 @@ class Fileupload extends Component {
     )
 
     static getDerivedStateFromProps(props, state) {
-        if (props.reset) { //means if form succes == true
+        if (props.reset) {
             return state = {
                 uploadedFiles: []
             }
         }
         return null;
     }
+
 
     render() {
         return (
@@ -102,6 +109,7 @@ class Fileupload extends Component {
                                 </div>
                                 : null
                         }
+
                     </div>
                 </section>
             </div>
