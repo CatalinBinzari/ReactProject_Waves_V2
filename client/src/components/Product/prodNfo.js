@@ -63,7 +63,7 @@ const ProdNfo = (props) => {
         </div>
     )
     const showProdSpecifications = (detail) => (
-        <div className="product_specifications">
+        <div className="progit duct_specifications">
             <h2>Specs:</h2>
             <div>
                 <div className="item">
